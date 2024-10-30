@@ -19,35 +19,14 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Logo with App Title
-              const CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.book,
-                        size: 60, color: Colors.orange), // Placeholder icon
-                    Text(
-                      "นาย มาร์ช",
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              Image.asset(
+                'Assets/image/logo.png', // Replace with your logo
+                width: 200,
+                height: 200,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 20),
-              const Text(
-                "BORROW APP",
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
+              
 
               // Username TextField
               TextField(
@@ -92,7 +71,7 @@ class LoginPage extends StatelessWidget {
                   _handleLogin(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal.shade800,
+                  backgroundColor: const Color.fromARGB(255, 0, 49, 43),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -101,7 +80,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 child: const Text(
                   "Login",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18 , color: Colors.white70),
                 ),
               ),
               const SizedBox(height: 20),

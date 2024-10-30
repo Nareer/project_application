@@ -3,6 +3,8 @@ import 'package:project/Login.dart';
 import 'package:project/User/History_User.dart';
 import 'dart:io';
 import 'package:project/User/Home_User.dart';
+import 'package:project/User/request.dart';
+
 
 class BookassetUser extends StatefulWidget {
   final File? profileImage;
@@ -418,178 +420,35 @@ class _BookassetpageState extends State<BookassetUser> {
     }
 
     return GestureDetector(
-      onTap: () {
-        if (status == 'Available') {
-          _showAvailablePopup(book['title']!, book['id']!, book['image']!);
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          color: statusColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: statusColor),
-        ),
-        child: Text(
-          statusText,
-          style: TextStyle(
-            color: statusColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+  onTap: () {
+    if (status == 'Available') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BorrowBookAppRequest()),
+      );
+    }
+  },
+  child: Container(
+    margin: const EdgeInsets.symmetric(vertical: 4),
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    decoration: BoxDecoration(
+      color: statusColor.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: statusColor),
+    ),
+    child: Text(
+      statusText,
+      style: TextStyle(
+        color: statusColor,
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
       ),
-    );
+    ),
+  ),
+);
+
   }
 
-  void _showAvailablePopup(String title, String id, String imagePath) {
-    final DateTime now = DateTime.now();
-    final String currentDate = "${now.day}/${now.month}/${now.year}";
-
-    TextEditingController returnDateController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const Divider(color: Colors.black, thickness: 1),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              imagePath,
-              height: 150,
-              width: 350,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(height: 5),
-            Text(
-              'Book ID: $id',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              'Borrow Date: $currentDate',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: returnDateController,
-              readOnly: true,
-              decoration: InputDecoration(
-                labelText: 'Return Date',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: now,
-                      firstDate: DateTime(now.year),
-                      lastDate: DateTime(now.year + 5),
-                    );
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-                      returnDateController.text = formattedDate;
-                    }
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text(
-                  'Back',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 6, 1, 249),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  _confirmBorrow(
-                      title, id, imagePath, returnDateController.text);
-                },
-                child:
-                    const Text('Borrow', style: TextStyle(color: Colors.white)),
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 229, 3, 3),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _confirmBorrow(
-      String title, String id, String imagePath, String returnDate) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Borrow'),
-        content: Text('Are you sure you want to borrow "$title"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              // Change status to Pending
-              setState(() {
-                final bookIndex = books.indexWhere((book) => book['id'] == id);
-                if (bookIndex != -1) {
-                  books[bookIndex]['status'] = 'Pending'; // เปลี่ยนสถานะ
-                }
-              });
-
-              // Show success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('$title has been borrowed successfully!'),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-
-              // Close dialogs
-              Navigator.of(context).pop(); // Close the confirm dialog
-              Navigator.of(context).pop(); // Close the book details dialog
-
-              // Navigate to the new screen
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        HistoryUser()), // Replace with your target screen widget
-              );
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildDropdown() {
     return Padding(

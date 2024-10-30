@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:project/Login.dart';
+import 'package:project/User/Bookasset_User.dart';
+import 'package:project/User/History_User.dart';
+import 'package:project/User/Home_User.dart';
+
+
 class BorrowBookAppRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,6 +24,7 @@ class BorrowBookScreen extends StatefulWidget {
 class _BorrowBookScreenState extends State<BorrowBookScreen> {
   TextEditingController returnDateController = TextEditingController();
   int _selectedIndex = 1; // Start with the "Assets Lists" tab selected
+  
 
   // Function to show date picker
   Future<void> _selectReturnDate(BuildContext context) async {
@@ -36,6 +43,7 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
       });
     }
   }
+  
 
   // Method to show dialog alert
   void _showBorrowDialog() {
@@ -74,19 +82,18 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
     // Add your navigation logic here
     switch (index) {
       case 0:
-        // Navigate to Home
-        break;
+         Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const HomeUser()));
+            break;
+        
       case 1:
-        // "Assets Lists" already selected, do nothing or show a message
-        break;
-      case 2:
-        // Navigate to Status
+        MaterialPageRoute(builder: (context) => const BookassetUser());
         break;
       case 3:
-        // Navigate to History
+        MaterialPageRoute(builder: (context) => const HistoryUser());// Navigate to History
         break;
       case 4:
-        // Handle Log out
+            MaterialPageRoute(builder: (context) => LoginPage());
         break;
     }
   }
@@ -129,14 +136,14 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
               padding:
                   const EdgeInsets.only(left: 16.0), // Padding for the icon
               child: Image.asset(
-                'assets/image/video-player.png',
+                'Assets/image/video-player.png',
               ),
             ),
             actions: [
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/image/proflie.jpg'),
+                  backgroundImage: AssetImage('Assets/image/Pic1.jpg'),
                 ),
               ),
             ],
@@ -179,7 +186,7 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
                     borderRadius: BorderRadius.circular(
                         12), // Optional: Rounded corners for the image
                     child: Image.asset(
-                      'assets/image/avengers.jpg',
+                      'Assets/image/Recommend_4.jpg',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -198,10 +205,10 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Divider(),
-                        Text('Book ID: A0005', style: TextStyle(fontSize: 16)),
-                        Text('Book Name: AVENGERS',
+                        Text('Book ID: F0003', style: TextStyle(fontSize: 16)),
+                        Text('Book Name: BLACK PANTHER',
                             style: TextStyle(fontSize: 16)),
-                        Text('Borrow Date: 16/10/2024',
+                        Text('Borrow Date: 30/10/2024',
                             style: TextStyle(fontSize: 16)),
                         TextField(
                           controller: returnDateController,
@@ -219,22 +226,31 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
-                                // Handle back action here
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue),
-                              child: Text('Back',
-                                  style: TextStyle(color: Colors.white)),
-                            ),
-                            ElevatedButton(
-                              onPressed:
-                                  _showBorrowDialog, // Show dialog when pressed
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red),
-                              child: Text('Borrow',
-                                  style: TextStyle(color: Colors.white)),
-                            ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BookassetUser()), // Replace `HomePage` with your target page
+    );
+  },
+  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+  child: Text(
+    'Back',
+    style: TextStyle(color: Colors.white),
+  ),
+),
+ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HistoryUser()), // Replace with your target page for borrowing
+    );
+  },
+  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+  child: Text(
+    'Borrow',
+    style: TextStyle(color: Colors.white),
+  ),
+),
                           ],
                         ),
                       ],
@@ -272,10 +288,6 @@ class _BorrowBookScreenState extends State<BorrowBookScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.movie_rounded),
               label: 'Lists',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.playlist_add_check_rounded),
-              label: 'Status',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
